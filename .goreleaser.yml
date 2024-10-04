@@ -28,7 +28,8 @@ release:
     owner: RocketRene
     name: hpi-mensa-api
 nfpms:
-  - file_name_template: "{{ .ConventionalFileName }}"
+  - id: nfpms
+    file_name_template: "{{ .ConventionalFileName }}"
     package_name: hpi-mensa-api
     maintainer: Rene Kuhn
     description: An API to get data about meals at Hasso Plattner Institute and University of Potsdam
