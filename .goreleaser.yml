@@ -8,8 +8,9 @@ builds:
       - CGO_ENABLED=0
     goos:
       - linux
-      - windows
-      - darwin
+    goarch:
+      - amd64
+      - arm64
     main: ./cmd/hpi-mensa-api/main.go
 archives:
   - format: tar.gz
@@ -19,7 +20,6 @@ archives:
       {{- if eq .Arch "amd64" }}x86_64
       {{- else if eq .Arch "386" }}i386
       {{- else }}{{ .Arch }}{{ end }}
-      {{- if .Arm }}v{{ .Arm }}{{ end }}
     format_overrides:
     - goos: windows
       format: zip
@@ -28,7 +28,9 @@ release:
     owner: RocketRene
     name: hpi-mensa-api
 nfpms:
-  - maintainer: Rene Kuhn
+  - file_name_template: "{{ .ConventionalFileName }}"
+    package_name: hpi-mensa-api
+    maintainer: Rene Kuhn
     description: An API to get data about meals at Hasso Plattner Institute and University of Potsdam
     homepage: https://github.com/RocketRene/hpi-mensa-api
     license: MIT
@@ -37,7 +39,10 @@ nfpms:
       - rpm
 publishers:
   - name: fury.io
-    cmd: curl -F package=@{{ .ArtifactName }} https://{{ .Env.FURY_TOKEN }}@push.fury.io/rocketrene/
+    ids:
+      - nfpms
+    cmd: |
+      curl -F package=@{{ .ArtifactPath }} https://{{ .Env.FURY_TOKEN }}@push.fury.io/rocketrene/
 changelog:
   sort: asc
   filters:
