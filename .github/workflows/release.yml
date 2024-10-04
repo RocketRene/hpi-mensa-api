@@ -15,6 +15,10 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: stable
+      - name: Install templ
+        run: go install github.com/a-h/templ/cmd/templ@latest
+      - name: Generate templ files
+        run: templ generate    
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v4
         with:
